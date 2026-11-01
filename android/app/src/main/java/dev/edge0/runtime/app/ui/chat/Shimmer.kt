@@ -20,7 +20,7 @@ import dev.edge0.runtime.app.ui.theme.LocalFontScale
 
 /** Waiting indicator before the first token (prefilling=true). */
 @Composable
-fun WorkingShimmer(label: String = "Working...", modifier: Modifier = Modifier) {
+fun WorkingShimmer(label: String = "正在处理…", modifier: Modifier = Modifier) {
     val t = rememberInfiniteTransition(label = "shimmer")
     val a by t.animateFloat(0.35f, 0.9f,
         infiniteRepeatable(tween(900, easing = LinearEasing), RepeatMode.Reverse),

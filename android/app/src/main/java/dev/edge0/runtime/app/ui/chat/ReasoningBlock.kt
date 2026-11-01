@@ -33,11 +33,11 @@ fun ReasoningBlock(thinking: String, active: Boolean, startedAtMs: Long?, endedA
     if (thinking.isEmpty() && !active) return
     var expanded by remember { mutableStateOf(false) }
     val header = if (active) {
-        "Thinking for %.0fs...".format((nowMs - (startedAtMs ?: nowMs)) / 1000.0)
+        "思考中，已 %.0f 秒…".format((nowMs - (startedAtMs ?: nowMs)) / 1000.0)
     } else if (startedAtMs == null && endedAtMs == null) {
-        "Thought"   // legacy rows without a timing basis: qualitative label only
+        "已思考"   // legacy rows without a timing basis: qualitative label only
     } else {
-        "Thought for %.0fs".format(((endedAtMs ?: nowMs) - (startedAtMs ?: endedAtMs!!)) / 1000.0)
+        "已思考 %.0f 秒".format(((endedAtMs ?: nowMs) - (startedAtMs ?: endedAtMs!!)) / 1000.0)
     }
     Surface(
         modifier = modifier.fillMaxWidth().padding(vertical = 4.dp),

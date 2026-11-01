@@ -90,18 +90,18 @@ fun ModelsScreen(onBack: () -> Unit) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         Row(Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Outlined.ArrowBack, "Back") }
-            Text("Models", style = MaterialTheme.typography.titleMedium)
+            IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Outlined.ArrowBack, "返回") }
+            Text("模型", style = MaterialTheme.typography.titleMedium)
             Spacer(Modifier.weight(1f))
             OutlinedButton(
                 onClick = { importLauncher.launch(arrayOf("*/*")) },
                 enabled = !importing,
-            ) { Text("Import") }
+            ) { Text("导入") }
             OutlinedButton(
                 onClick = { refreshTick++ },
                 enabled = !importing,
                 modifier = Modifier.padding(start = 8.dp, end = 12.dp),
-            ) { Text("Refresh") }
+            ) { Text("刷新") }
         }
         progress?.let { p ->
             Surface(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp),
@@ -112,7 +112,7 @@ fun ModelsScreen(onBack: () -> Unit) {
                     val amount = if (total != null && total > 0)
                         "${fmtGiB(p.copied)} / ${fmtGiB(total)}"
                     else fmtGiB(p.copied)
-                    Text("Copying ${p.name} · $amount", style = MaterialTheme.typography.bodySmall)
+                    Text("正在复制 ${p.name} · $amount", style = MaterialTheme.typography.bodySmall)
                     if (total != null && total > 0) {
                         LinearProgressIndicator(
                             progress = { (p.copied.toFloat() / total).coerceIn(0f, 1f) },
@@ -144,11 +144,11 @@ fun ModelsScreen(onBack: () -> Unit) {
                     shape = RoundedCornerShape(10.dp),
                     color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)) {
                 Column(Modifier.padding(12.dp)) {
-                    Text("Storage: ${if (avail > 0) fmtGiB(avail) else "N/A"} free" +
-                        if (maxReq > 0) " / largest model ${fmtGiB(maxReq)}, ${fmtGiB((maxReq * 1.2).toLong())} recommended" else "",
+                    Text("存储：剩余 ${if (avail > 0) fmtGiB(avail) else "N/A"}" +
+                        if (maxReq > 0) " / 最大模型 ${fmtGiB(maxReq)}，建议预留 ${fmtGiB((maxReq * 1.2).toLong())}" else "",
                          style = MaterialTheme.typography.bodySmall)
                     if (warn) {
-                        Text("Free space below 1.2x requirement: loading may fail midway (engine reports out-of-storage)",
+                        Text("剩余空间低于模型需求的 1.2 倍：加载可能中途失败（引擎将报存储不足）",
                              color = MaterialTheme.colorScheme.error,
                              style = MaterialTheme.typography.bodySmall)
                     }
@@ -161,7 +161,7 @@ fun ModelsScreen(onBack: () -> Unit) {
                  modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp))
         }
         if (entries.isEmpty() && !importing) {
-            Text("No models yet. Tap Import and choose a .gguf file.",
+            Text("还没有模型。点击“导入”并选择 .gguf 文件。",
                  modifier = Modifier.padding(16.dp), style = MaterialTheme.typography.bodyMedium)
             Surface(Modifier.fillMaxWidth().padding(horizontal = 12.dp),
                     shape = RoundedCornerShape(10.dp),
@@ -172,8 +172,8 @@ fun ModelsScreen(onBack: () -> Unit) {
                         fontSize = 11.sp * LocalFontScale.current),
                      modifier = Modifier.padding(12.dp))
             }
-            Text("The copy can take several minutes for a multi-gigabyte model. Uninstalling the app wipes its data " +
-                 "(Android policy); import the files again if they disappear.",
+            Text("多 GB 模型的复制可能需要几分钟。卸载应用会清空其数据（Android 系统策略）；" +
+                 "若模型文件消失，请重新导入。",
                  style = MaterialTheme.typography.bodySmall,
                  color = MaterialTheme.colorScheme.onSurfaceVariant,
                  modifier = Modifier.padding(16.dp))
@@ -191,7 +191,7 @@ fun ModelsScreen(onBack: () -> Unit) {
                                  container.settings.update { s -> s.copy(activeModelDir = e.dir.absolutePath) }
                              } catch (ex: Exception) {
                                  android.util.Log.e("Edge0Load", "ensureLoaded failed", ex)
-                                 note = "Load failed: ${ex.message} (if the app was just updated, re-push assets to the import path)"
+                                 note = "加载失败：${ex.message}（若刚升级过应用，请重新推送资源文件到导入路径）"
                              }
                          }
                      },
@@ -199,7 +199,7 @@ fun ModelsScreen(onBack: () -> Unit) {
                          scope.launch {
                              note = null
                              try { container.runtime.unloadActive() } catch (ex: Exception) {
-                                 note = "Unload failed: ${ex.message}"
+                                 note = "卸载失败：${ex.message}"
                              }
                          }
                      })
@@ -227,26 +227,26 @@ private fun ModelRow(e: ModelEntry, active: Boolean, busy: Boolean, loading: Boo
                          modifier = Modifier.padding(horizontal = 4.dp))
                 }
                 Text("${fmtGiB(if (e.dirBytes > 0) e.dirBytes else e.totalBytes)}" +
-                     if (!e.valid) " · incomplete (${e.hint})" else "",
+                     if (!e.valid) " · 不完整（${e.hint}）" else "",
                      style = MaterialTheme.typography.bodySmall,
                      color = if (e.valid) MaterialTheme.colorScheme.onSurfaceVariant
                              else MaterialTheme.colorScheme.error)
-                Text(if (active) "● Loaded" else if (loading) "◌ Loading..." else "○ Not loaded",
+                Text(if (active) "● 已加载" else if (loading) "◌ 加载中…" else "○ 未加载",
                      style = MaterialTheme.typography.bodySmall.copy(
                         fontSize = 11.sp * LocalFontScale.current),
                      color = if (active) MaterialTheme.colorScheme.primary
                              else MaterialTheme.colorScheme.onSurfaceVariant)
             }
             if (!e.valid) {
-                Icon(Icons.Outlined.Warning, "Broken assets", tint = MaterialTheme.colorScheme.error)
+                Icon(Icons.Outlined.Warning, "资源不完整", tint = MaterialTheme.colorScheme.error)
                 return@Row
             }
             if (active) {
-                OutlinedButton(onClick = onUnload, enabled = !busy && !loading) { Text("Unload") }
+                OutlinedButton(onClick = onUnload, enabled = !busy && !loading) { Text("卸载") }
             } else {
                 Button(onClick = onLoad, enabled = !busy && !loading) {
                     if (loading) CircularProgressIndicator(Modifier.size(14.dp))
-                    else Text("Load")
+                    else Text("加载")
                 }
             }
         }

@@ -51,18 +51,18 @@ object ModelImport {
         onProgress: suspend (copied: Long, total: Long?) -> Unit = { _, _ -> },
     ): File = input.use { inp ->
         val safe = fileName(displayName)
-            ?: throw ImportException("Choose a file whose name ends in .gguf")
-        if (sizeBytes != null && sizeBytes < 0) throw ImportException("invalid size")
+            ?: throw ImportException("请选择文件名以 .gguf 结尾的文件")
+        if (sizeBytes != null && sizeBytes < 0) throw ImportException("大小无效")
         if (!modelsDir.exists() && !modelsDir.mkdirs()) {
-            throw ImportException("Could not create ${modelsDir.path}")
+            throw ImportException("无法创建目录 ${modelsDir.path}")
         }
         if (sizeBytes != null && sizeBytes > availableBytes) {
-            throw ImportException("Not enough free space for $safe")
+            throw ImportException("剩余空间不足，无法导入 $safe")
         }
         val dest = File(modelsDir, safe)
         val partial = File(modelsDir, safe + PARTIAL_SUFFIX)
         if (partial.exists() && !partial.delete()) {
-            throw ImportException("Could not clear a previous partial copy of $safe")
+            throw ImportException("无法清除 $safe 之前未完成的副本")
         }
         var finished = false
         try {
@@ -83,15 +83,15 @@ object ModelImport {
                     }
                     out.fd.sync()
                     if (copied != lastReport) onProgress(copied, sizeBytes)
-                    if (copied == 0L) throw ImportException("$safe is empty")
+                    if (copied == 0L) throw ImportException("$safe 是空文件")
                     if (sizeBytes != null && copied != sizeBytes) {
-                        throw ImportException("$safe was truncated ($copied of $sizeBytes bytes)")
+                        throw ImportException("$safe 不完整（应为 $sizeBytes 字节，实际 $copied 字节）")
                     }
             }
             if (dest.exists() && !dest.delete()) {
-                throw ImportException("Could not replace $safe")
+                throw ImportException("无法替换 $safe")
             }
-            if (!partial.renameTo(dest)) throw ImportException("Could not finish importing $safe")
+            if (!partial.renameTo(dest)) throw ImportException("无法完成 $safe 的导入")
             finished = true
             return dest
         } finally {

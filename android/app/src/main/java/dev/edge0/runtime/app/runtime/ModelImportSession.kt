@@ -45,7 +45,7 @@ class ModelImportSession(private val modelsDir: File) {
                                 appContext, uri, modelsDir,
                                 blocked = { dest ->
                                     if (activePath() == dest.absolutePath)
-                                        "Unload ${dest.name} before replacing it"
+                                        "请先卸载 ${dest.name} 再替换"
                                     else null
                                 },
                             ) { name, copied, total ->
@@ -56,7 +56,7 @@ class ModelImportSession(private val modelsDir: File) {
                     } catch (e: CancellationException) {
                         throw e
                     } catch (e: Exception) {
-                        problems += e.message ?: "Import failed"
+                        problems += e.message ?: "导入失败"
                     }
                 }
             } finally {
@@ -65,8 +65,8 @@ class ModelImportSession(private val modelsDir: File) {
             }
             status.value = when (imported) {
                 0 -> null
-                1 -> "Imported 1 file"
-                else -> "Imported $imported files"
+                1 -> "已导入 1 个文件"
+                else -> "已导入 $imported 个文件"
             }
             error.value = problems.takeIf { it.isNotEmpty() }?.joinToString("\n")
         }

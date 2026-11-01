@@ -109,13 +109,13 @@ fun AppRoot() {
                     Text("Edge0 Chat", style = MaterialTheme.typography.titleLarge,
                          modifier = Modifier.weight(1f))
                     IconButton(onClick = { closeDrawer() }) {
-                        Icon(Icons.Outlined.Close, "Close drawer",
+                        Icon(Icons.Outlined.Close, "关闭侧边栏",
                              tint = MaterialTheme.colorScheme.onSurface)
                     }
                 }
                 Box(Modifier.fillMaxWidth().height(1.dp)
                     .background(MaterialTheme.colorScheme.outline))
-                Text("History", style = MaterialTheme.typography.labelLarge,
+                Text("历史记录", style = MaterialTheme.typography.labelLarge,
                      color = MaterialTheme.colorScheme.onSurfaceVariant,
                      modifier = Modifier.padding(start = 20.dp, top = 16.dp, bottom = 6.dp))
                 LazyColumn(Modifier.weight(1f),
@@ -132,7 +132,7 @@ fun AppRoot() {
                         )
                     }
                 }
-                NavigationDrawerItem(label = { Text("Settings") },
+                NavigationDrawerItem(label = { Text("设置") },
                     icon = { Icon(Icons.Outlined.Settings, null) }, selected = false,
                     onClick = { nav.navigate(Routes.SETTINGS); closeDrawer() })
                 Spacer(Modifier.height(8.dp))
@@ -184,11 +184,11 @@ private fun ThreadItem(t: ThreadSummary, selected: Boolean, busyHere: Boolean,
                 MaterialTheme.colorScheme.primary, CircleShape).alpha(a))
             Spacer(Modifier.width(8.dp))
         }
-        Text(t.title ?: "New chat", maxLines = 1, overflow = TextOverflow.Ellipsis,
+        Text(t.title ?: "新对话", maxLines = 1, overflow = TextOverflow.Ellipsis,
              style = MaterialTheme.typography.bodyMedium,
              modifier = Modifier.weight(1f))
         IconButton(onClick = onDelete, modifier = Modifier.size(36.dp)) {
-            Icon(Icons.Outlined.Close, "Delete chat",
+            Icon(Icons.Outlined.Close, "删除对话",
                  tint = MaterialTheme.colorScheme.onSurfaceVariant,
                  modifier = Modifier.size(17.dp))
         }

@@ -24,15 +24,15 @@ object ModelDocumentImport {
         val (display, size) = readMeta(context, uri)
         val safe = ModelImport.fileName(display)
             ?: throw ModelImport.ImportException(
-                "Choose a file whose name ends in .gguf" +
-                    (display?.let { " ($it)" } ?: ""))
+                "请选择文件名以 .gguf 结尾的文件" +
+                    (display?.let { "（$it）" } ?: ""))
         val dest = File(modelsDir, safe)
         blocked(dest)?.let { throw ModelImport.ImportException(it) }
         val input = try {
             context.contentResolver.openInputStream(uri)
         } catch (e: SecurityException) {
-            throw ModelImport.ImportException("Cannot open the selected file")
-        } ?: throw ModelImport.ImportException("Cannot open the selected file")
+            throw ModelImport.ImportException("无法打开所选文件")
+        } ?: throw ModelImport.ImportException("无法打开所选文件")
         onProgress(safe, 0L, size)
         return ModelImport.copy(input, modelsDir, safe, size) { copied, total ->
             onProgress(safe, copied, total)

@@ -71,7 +71,7 @@ fun Composer(
                 decorationBox = { inner ->
                     Box(contentAlignment = Alignment.CenterStart) {
                         if (value.isEmpty()) {
-                            Text("Ask anything...",
+                            Text("随便问点什么…",
                                  color = MaterialTheme.colorScheme.onSurfaceVariant,
                                  fontSize = 15.sp * LocalFontScale.current)
                         }
@@ -95,7 +95,7 @@ fun Composer(
             .clickable(enabled = canSend) { if (busy) onStop() else onSend() },
             contentAlignment = Alignment.Center) {
             Icon(if (busy) Icons.Filled.Stop else Icons.Filled.ArrowUpward,
-                 contentDescription = if (busy) "Stop" else "Send",
+                 contentDescription = if (busy) "停止生成" else "发送",
                  tint = fg, modifier = Modifier.size(22.dp))
         }
     }

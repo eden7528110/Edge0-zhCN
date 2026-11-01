@@ -31,7 +31,7 @@ object ModelInventory {
         }.map { f ->
             val ok = f.length() > 0
             ModelEntry(f.name.removeSuffix(".gguf"), f, f.length(), f.length(), ok,
-                if (ok) null else "empty file")
+                if (ok) null else "空文件")
         }
 
     /** Free space on the volume backing the primary model root (UI warning gate). */
@@ -41,11 +41,11 @@ object ModelInventory {
 
     /** Import instructions shown on the models screen. */
     fun importTemplate(pkg: String): String = listOf(
-        "Tap Import and choose a .gguf file. The app copies it into private storage.",
-        "This works on a release install. USB debugging is not required.",
-        "8B also needs lora_edge0_8b-gguf.gguf beside it. Import that file the same way.",
-        "Expected names: edge0-8b.gguf, lora_edge0_8b-gguf.gguf, edge0-35b.gguf.",
-        "A debug build can instead be staged over USB:",
+        "点击“导入”并选择 .gguf 文件，应用会将其复制到私有存储。",
+        "正式安装版即可使用，无需 USB 调试。",
+        "8B 模型还需同目录的 lora_edge0_8b-gguf.gguf，请以同样方式导入。",
+        "预期文件名：edge0-8b.gguf、lora_edge0_8b-gguf.gguf、edge0-35b.gguf。",
+        "调试版也可通过 USB 推送文件：",
         "  adb push <file> /data/local/tmp/",
         "  adb shell run-as $pkg cp /data/local/tmp/<file> files/models/<file>",
     ).joinToString("\n")

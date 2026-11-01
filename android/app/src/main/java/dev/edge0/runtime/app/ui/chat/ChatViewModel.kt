@@ -92,13 +92,13 @@ class ChatViewModel(
 
             if (runtime.activeModelDir == null) {
                 if (settings.activeModelDir.isBlank()) {
-                    banner.value = "No model loaded: open Models, import a .gguf, then load it"
+                    banner.value = "未加载模型：请打开“模型”页面，导入 .gguf 后点击加载"
                     return@launch
                 }
                 try {
                     runtime.ensureLoaded(settings.activeModelDir)
                 } catch (e: Exception) {
-                    banner.value = "Load failed: ${e.message}"
+                    banner.value = "加载失败：${e.message}"
                     return@launch
                 }
             }
@@ -176,7 +176,7 @@ class ChatViewModel(
                 runGenerate(tid, settings,
                             HistoryWindow.tighterBudget(budget), allowRetry = false)
             } else {
-                banner.value = "Generation failed[${fail.status}]: ${fail.diag}"
+                banner.value = "生成失败[${fail.status}]：${fail.diag}"
             }
         }
     }

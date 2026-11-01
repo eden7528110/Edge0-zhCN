@@ -99,7 +99,7 @@ fun ChatScreen(
         Row(Modifier.fillMaxWidth().height(52.dp).padding(horizontal = 8.dp),
             verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onOpenDrawer) {
-                Icon(Icons.Outlined.Menu, "Chats")
+                Icon(Icons.Outlined.Menu, "对话列表")
             }
             Spacer(Modifier.weight(1f))
             // centered title: perceived model name + On-device Inference subtitle
@@ -112,7 +112,7 @@ fun ChatScreen(
                 }
                 Text(title, style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Bold, fontSize = 16.sp * LocalFontScale.current))
-                Text("On-device Inference", style = MaterialTheme.typography.labelSmall.copy(
+                Text("端侧本地推理", style = MaterialTheme.typography.labelSmall.copy(
                     fontSize = 11.sp * LocalFontScale.current,
                     color = MaterialTheme.colorScheme.onSurfaceVariant))
             }
@@ -122,7 +122,7 @@ fun ChatScreen(
                 Surface(shape = CircleShape,
                         color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                         modifier = Modifier.size(40.dp).clickable(onClick = onNewChat)) {}
-                Icon(Icons.Outlined.Edit, "New chat",
+                Icon(Icons.Outlined.Edit, "新对话",
                      modifier = Modifier.size(20.dp), tint = MaterialTheme.colorScheme.onSurface)
             }
             Spacer(Modifier.width(12.dp))
@@ -131,7 +131,7 @@ fun ChatScreen(
                 Surface(shape = CircleShape,
                         color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                         modifier = Modifier.size(40.dp).clickable(onClick = onOpenModels)) {}
-                Icon(Icons.Outlined.SwapHoriz, "Switch model ($modelLabel)",
+                Icon(Icons.Outlined.SwapHoriz, "切换模型（$modelLabel）",
                      modifier = Modifier.size(20.dp),
                      tint = MaterialTheme.colorScheme.onSurface)
                 val dot = when {
@@ -189,7 +189,7 @@ fun ChatScreen(
                     modifier = Modifier.align(Alignment.BottomEnd).padding(12.dp)
                         .size(36.dp),
                     shape = CircleShape, containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                ) { Icon(Icons.Outlined.ArrowDownward, "Scroll to bottom",
+                ) { Icon(Icons.Outlined.ArrowDownward, "滚动到底部",
                         modifier = Modifier.size(18.dp)) }
             }
         }
@@ -209,7 +209,7 @@ fun ChatScreen(
                          overflow = TextOverflow.Ellipsis,
                          style = MaterialTheme.typography.bodySmall)
                     IconButton(onClick = { vm.banner.value = null }) {
-                        Icon(Icons.Outlined.Close, "Dismiss", modifier = Modifier.size(14.dp))
+                        Icon(Icons.Outlined.Close, "关闭", modifier = Modifier.size(14.dp))
                     }
                 }
             }
@@ -243,10 +243,10 @@ private fun MessageRow(m: MessageView, isLastAssistant: Boolean, showActions: Bo
                                        modifier = Modifier.fillMaxWidth().height(88.dp))
                         Row(horizontalArrangement = Arrangement.End,
                             modifier = Modifier.fillMaxWidth()) {
-                            Text("Cancel", color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            Text("取消", color = MaterialTheme.colorScheme.onSurfaceVariant,
                                  modifier = Modifier.padding(8.dp)
                                      .clickableText { editing = false })
-                            Text("Save", color = MaterialTheme.colorScheme.primary,
+                            Text("保存", color = MaterialTheme.colorScheme.primary,
                                  modifier = Modifier.padding(8.dp).clickableText {
                                      if (buf.isNotBlank()) onEdit(buf.trim())
                                      editing = false
@@ -307,16 +307,16 @@ private fun AssistantBody(body: String, thinking: String, reasoning: ReasoningSt
                            nowMs = System.currentTimeMillis())
         }
         if (prefilling && isStreaming) {
-            WorkingShimmer("Working...")
+            WorkingShimmer("正在处理…")
         }
         if (body.isNotEmpty()) {
             MarkdownText(body, Modifier.fillMaxWidth())
         }
         status?.let { st ->
             val chip = when (st) {
-                MsgStatus.CANCELLED -> "Cancelled"
-                MsgStatus.INTERRUPTED -> "Interrupted"
-                MsgStatus.ERROR -> "Error"
+                MsgStatus.CANCELLED -> "已取消"
+                MsgStatus.INTERRUPTED -> "已中断"
+                MsgStatus.ERROR -> "错误"
                 else -> null
             }
             if (chip != null) {
@@ -335,9 +335,9 @@ private fun Modifier.clickableText(onClick: () -> Unit): Modifier =
 
 // starter prompts (three fixed questions; display truncates with ellipsis, send uses full text)
 private val PRESET_PROMPTS = listOf(
-    "Will the water level rise when ice floating in it melts? Explain in two sentences.",
-    "Write a sci-fi story with a twist in exactly six words.",
-    "Make 24 using 3, 3, 8, and 8 exactly once each, with only basic arithmetic and parentheses.",
+    "漂浮在水中的冰块融化后，水位会上升吗？请用两句话解释。",
+    "用恰好六个词写一个有反转的科幻故事。",
+    "用 3、3、8、8 每个数字恰好一次，只使用基本四则运算和括号，算出 24。",
 )
 
 @Composable
@@ -347,7 +347,7 @@ private fun WelcomePage(onPick: (String) -> Unit) {
         Text("edge0", style = MaterialTheme.typography.displaySmall.copy(
             fontWeight = FontWeight.Bold, fontSize = 34.sp * LocalFontScale.current))
         Spacer(Modifier.height(10.dp))
-        Text("Private AI, running locally on your device",
+        Text("隐私 AI，完全在你的设备上本地运行",
              style = MaterialTheme.typography.bodyMedium.copy(
                 color = MaterialTheme.colorScheme.onSurfaceVariant))
         Spacer(Modifier.height(30.dp))

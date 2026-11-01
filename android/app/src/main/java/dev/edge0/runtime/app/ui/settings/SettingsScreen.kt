@@ -55,17 +55,17 @@ fun SettingsScreen(onBack: () -> Unit) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         Row(Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Outlined.ArrowBack, "Back") }
-            Text("Settings", style = MaterialTheme.typography.titleMedium)
+            IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Outlined.ArrowBack, "返回") }
+            Text("设置", style = MaterialTheme.typography.titleMedium)
         }
 
-        Group("Appearance") {
+        Group("外观") {
             Row(Modifier.fillMaxWidth().padding(vertical = 6.dp),
                 verticalAlignment = Alignment.CenterVertically) {
-                Text("Theme", modifier = Modifier.weight(1f))
+                Text("主题", modifier = Modifier.weight(1f))
                 SingleChoiceSegmentedButtonRow {
-                    val opts = listOf(ThemeMode.SYSTEM to "System", ThemeMode.LIGHT to "Light",
-                                      ThemeMode.DARK to "Dark")
+                    val opts = listOf(ThemeMode.SYSTEM to "跟随系统", ThemeMode.LIGHT to "浅色",
+                                      ThemeMode.DARK to "深色")
                     opts.forEachIndexed { i, (mode, label) ->
                         SegmentedButton(
                             selected = s.themeMode == mode,
@@ -75,58 +75,58 @@ fun SettingsScreen(onBack: () -> Unit) {
                     }
                 }
             }
-            Text("Font size ${"%.2f".format(s.fontScale)}", style = MaterialTheme.typography.bodySmall)
+            Text("字体大小 ${"%.2f".format(s.fontScale)}", style = MaterialTheme.typography.bodySmall)
             Slider(value = s.fontScale, onValueChange = { v ->
                 scope.launch { store.update { cur -> cur.copy(fontScale = v) } } },
                 valueRange = 0.85f..1.3f)
         }
 
-        Group("Assistant") {
+        Group("助手") {
             Row(Modifier.fillMaxWidth().padding(vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically) {
-                Text("Use system prompt", modifier = Modifier.weight(1f))
+                Text("使用系统提示词", modifier = Modifier.weight(1f))
                 Switch(checked = s.useSystemPrompt,
                        onCheckedChange = { c -> patch { cur -> cur.copy(useSystemPrompt = c) } })
             }
             if (s.useSystemPrompt) {
                 OutlinedTextField(value = s.systemPrompt,
                     onValueChange = { v -> patch { cur -> cur.copy(systemPrompt = v) } },
-                    label = { Text("System prompt") },
+                    label = { Text("系统提示词") },
                     minLines = 3, maxLines = 6, modifier = Modifier.fillMaxWidth())
             }
             Row(Modifier.fillMaxWidth().padding(vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically) {
-                Text("Enable thinking", modifier = Modifier.weight(1f))
+                Text("启用思考", modifier = Modifier.weight(1f))
                 Switch(checked = s.enableThinking,
                        onCheckedChange = { c -> patch { cur -> cur.copy(enableThinking = c) } })
             }
         }
 
-        Group("Sampling") {
+        Group("采样参数") {
             // defaults mirror the upstream sampling quartet
-            ParamSlider("repetition penalty (1.0=off)", s.repetitionPenalty, 1f, 1.5f) { v ->
+            ParamSlider("重复惩罚 (1.0=关闭)", s.repetitionPenalty, 1f, 1.5f) { v ->
                 patch { cur -> cur.copy(repetitionPenalty = v) } }
-            ParamSlider("temperature (0=greedy)", s.temperature, 0f, 2f) { v ->
+            ParamSlider("温度 (0=贪婪)", s.temperature, 0f, 2f) { v ->
                 patch { cur -> cur.copy(temperature = v) } }
-            ParamSliderInt("top-k (0=off)", s.topK, 0, 100) { v ->
+            ParamSliderInt("top-k (0=关闭)", s.topK, 0, 100) { v ->
                 patch { cur -> cur.copy(topK = v) } }
-            ParamSlider("top-p (>=1=off)", s.topP, 0.1f, 1f) { v ->
+            ParamSlider("top-p (>=1=关闭)", s.topP, 0.1f, 1f) { v ->
                 patch { cur -> cur.copy(topP = v) } }
-            ParamSliderInt("max new tokens (0=default 1024)", s.maxNewTokens, 0, 2048) { v ->
+            ParamSliderInt("最大新 token 数 (0=默认 1024)", s.maxNewTokens, 0, 2048) { v ->
                 patch { cur -> cur.copy(maxNewTokens = v) } }
             OutlinedTextField(value = s.seed.toString(),
                 onValueChange = { v -> v.toLongOrNull()?.let { seed ->
                     patch { cur -> cur.copy(seed = seed) } } },
-                label = { Text("seed") }, singleLine = true,
+                label = { Text("随机种子 (seed)") }, singleLine = true,
                 modifier = Modifier.fillMaxWidth().padding(top = 6.dp))
         }
 
-        Group("About") {
-            Text("llama.cpp (pinned build) · " +
-                 "app ${dev.edge0.runtime.app.BuildConfig.VERSION_NAME}" +
+        Group("关于") {
+            Text("llama.cpp（锁定版本构建） · " +
+                 "应用 ${dev.edge0.runtime.app.BuildConfig.VERSION_NAME}" +
                  "+${dev.edge0.runtime.app.BuildConfig.GIT_SHA}",
                  style = MaterialTheme.typography.bodySmall)
-            Text("Runtime and UI ship in a single APK",
+            Text("推理引擎与界面打包于同一 APK",
                  style = MaterialTheme.typography.bodySmall,
                  color = MaterialTheme.colorScheme.onSurfaceVariant)
         }

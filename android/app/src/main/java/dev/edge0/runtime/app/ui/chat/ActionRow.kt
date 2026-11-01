@@ -41,19 +41,19 @@ fun ActionRow(
         if (endAligned) Spacer(Modifier.weight(1f))
         IconButton(onClick = { clip.setText(AnnotatedString(text)) },
                    modifier = Modifier.width(36.dp)) {
-            Icon(Icons.Outlined.ContentCopy, "Copy", tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            Icon(Icons.Outlined.ContentCopy, "复制", tint = MaterialTheme.colorScheme.onSurfaceVariant,
                  modifier = Modifier.size(16.dp))
         }
         if (canEdit) IconButton(onClick = onEdit, modifier = Modifier.width(36.dp)) {
-            Icon(Icons.Outlined.Edit, "Edit", tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            Icon(Icons.Outlined.Edit, "编辑", tint = MaterialTheme.colorScheme.onSurfaceVariant,
                  modifier = Modifier.size(16.dp))
         }
         IconButton(onClick = onDelete, modifier = Modifier.width(36.dp)) {
-            Icon(Icons.Outlined.Delete, "Delete", tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            Icon(Icons.Outlined.Delete, "删除", tint = MaterialTheme.colorScheme.onSurfaceVariant,
                  modifier = Modifier.size(16.dp))
         }
         if (canRegenerate) IconButton(onClick = onRegenerate, modifier = Modifier.width(36.dp)) {
-            Icon(Icons.Outlined.Refresh, "Regenerate", tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            Icon(Icons.Outlined.Refresh, "重新生成", tint = MaterialTheme.colorScheme.onSurfaceVariant,
                  modifier = Modifier.size(16.dp))
         }
         if (!endAligned) Spacer(Modifier.weight(1f))
@@ -67,11 +67,11 @@ fun StatsLine(newTokens: Int?, ttftMs: Long?, prefillTokS: Double?,
               decodeTokS: Double?, memBytes: Long?,
               modifier: Modifier = Modifier) {
     val parts = ArrayList<String>(5)
-    if (newTokens != null && newTokens > 0) parts.add("$newTokens tokens")
-    if (ttftMs != null && ttftMs > 0) parts.add("TTFT %.1fs".format(ttftMs / 1000.0))
-    if (prefillTokS != null && prefillTokS > 0.05) parts.add("prefill %.1f tok/s".format(prefillTokS))
-    if (decodeTokS != null && decodeTokS > 0) parts.add("decode %.2f tok/s".format(decodeTokS))
-    if (memBytes != null && memBytes > 0) parts.add("pool %.0f MB".format(memBytes / 1048576.0))
+    if (newTokens != null && newTokens > 0) parts.add("$newTokens 个 token")
+    if (ttftMs != null && ttftMs > 0) parts.add("TTFT %.1f 秒".format(ttftMs / 1000.0))
+    if (prefillTokS != null && prefillTokS > 0.05) parts.add("预填充 %.1f tok/s".format(prefillTokS))
+    if (decodeTokS != null && decodeTokS > 0) parts.add("解码 %.2f tok/s".format(decodeTokS))
+    if (memBytes != null && memBytes > 0) parts.add("驻留池 %.0f MB".format(memBytes / 1048576.0))
     if (parts.isEmpty()) return
     Text(parts.joinToString("  ·  "),
          style = MaterialTheme.typography.bodySmall.copy(

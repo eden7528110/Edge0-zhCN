@@ -1,0 +1,56 @@
+name: 🧩 New model support request
+description: Request (or offer to add) support for another MoE model / checkpoint.
+labels: ["model-support"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        edge0 is built to take new models through a documented path — see
+        [`docs/adding-a-model.md`](https://github.com/Edge0-AI/Edge0/blob/main/docs/adding-a-model.md).
+        The best model requests come with the config below. **Contributions welcome** — if you
+        want to add it yourself, say so and we'll help review.
+
+  - type: input
+    id: model_name
+    attributes:
+      label: Model name
+      placeholder: Qwen3.6-Next-80B-A3B
+    validations:
+      required: true
+
+  - type: input
+    id: hf_link
+    attributes:
+      label: Hugging Face / ModelScope link
+      placeholder: https://huggingface.co/...
+    validations:
+      required: true
+
+  - type: input
+    id: model_type
+    attributes:
+      label: config.json `model_type`
+      description: The architecture id from the checkpoint's config.json — edge0 resolves tiers via this (see TYPE_ALIASES).
+      placeholder: qwen3_5_moe / bailing_hybrid / ...
+    validations:
+      required: false
+
+  - type: textarea
+    id: arch
+    attributes:
+      label: Architecture summary
+      description: Sparse MoE? Number of layers / experts / top-k routing width? Attention type (MHA / MLA / linear)? Anything unusual.
+      placeholder: Sparse MoE, 48 layers, 128 experts, top-8 routing, MLA attention.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: contribute
+    attributes:
+      label: Are you willing to contribute this?
+      options:
+        - "Yes — I'd like to open a PR (happy to get guidance)"
+        - "Maybe, with help"
+        - "No, this is a request"
+    validations:
+      required: false

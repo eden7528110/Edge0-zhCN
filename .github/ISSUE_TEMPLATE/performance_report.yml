@@ -1,0 +1,89 @@
+name: 🐢 Performance report
+description: Decode/prefill speed, time-to-first-token, or memory usage differs from the documented benchmarks.
+labels: ["performance"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for "slower than the README numbers" or "high memory / OOM" reports
+        (e.g. #17, #110). The documented benchmarks were measured on a **Mac mini M4 Pro, 24 GB**.
+        Low-memory machines (8–16 GB) can be dramatically slower because expert pages are
+        continuously evicted and re-read from SSD — please include your total RAM.
+
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Model tier
+      options:
+        - edge0-35b
+        - edge0-8b
+    validations:
+      required: true
+
+  - type: input
+    id: hardware
+    attributes:
+      label: Hardware / chip
+      placeholder: Apple M1 Pro
+    validations:
+      required: true
+
+  - type: input
+    id: ram
+    attributes:
+      label: Total RAM / unified memory
+      placeholder: 16 GB
+    validations:
+      required: true
+
+  - type: input
+    id: disk
+    attributes:
+      label: Storage type
+      description: Internal SSD vs external/USB matters a lot for streaming expert reads.
+      placeholder: Internal NVMe SSD
+    validations:
+      required: false
+
+  - type: input
+    id: decode_observed
+    attributes:
+      label: Observed decode speed (tok/s)
+      placeholder: "0.6 tok/s (doc says ~15)"
+    validations:
+      required: false
+
+  - type: input
+    id: ttft
+    attributes:
+      label: Observed time-to-first-token
+      placeholder: 11 s
+    validations:
+      required: false
+
+  - type: input
+    id: memory
+    attributes:
+      label: Observed peak memory
+      description: Note whether this is MLX allocator peak or process RSS (they differ — see #106).
+      placeholder: 4.2 GB (process RSS)
+    validations:
+      required: false
+
+  - type: textarea
+    id: flags
+    attributes:
+      label: Flags / settings tried
+      description: e.g. --prefill-ondemand, full_layer_prefill, warm_willneed, context length, max_tokens.
+      placeholder: Tried warm_willneed and full_layer_prefill=False, no change.
+    validations:
+      required: false
+
+  - type: textarea
+    id: command
+    attributes:
+      label: Exact command used to measure
+      description: Ideally the output of examples/bench.py so numbers are comparable.
+      render: shell
+    validations:
+      required: true
